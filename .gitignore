@@ -1,0 +1,17 @@
+.vercel
+*.log
+*.pyc
+__pycache__
+
+# Environments 
+.env 
+.venv 
+env/ 
+venv/ 
+ENV/ 
+env.bak/ 
+venv.bak/ 
+
+# 下方是 astra db 的 token 資料
+Test-token.json
+secure-connect-test.zip

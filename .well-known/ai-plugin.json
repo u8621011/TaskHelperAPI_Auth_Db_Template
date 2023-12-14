@@ -1,0 +1,18 @@
+{
+    "schema_version": "v1",
+    "name_for_human": "TODO List (Auth+Db)",
+    "name_for_model": "todo",
+    "description_for_human": "Manage your TODO list. You can add, remove and view your TODOs.",
+    "description_for_model": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
+    "auth": {
+      "type": "none"
+    },
+    "api": {
+      "type": "openapi",
+      "url": "https://{your_vercel_proj_domain_here}/.well-known/openapi.json"
+    },
+    "logo_url": "https://{your_vercel_proj_domain_here}/logo.png",
+    "contact_email": "{your_email_here}",
+    "legal_info_url": "{your_legal_info_url_here}"
+  }
+  
