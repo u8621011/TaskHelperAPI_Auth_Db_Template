@@ -1,18 +1,11 @@
 import requests
 import jwt
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.asymmetric import rsa
-from base64 import urlsafe_b64decode, b64decode
-from jwt.algorithms import RSAAlgorithm
-from fastapi import Request, HTTPException
+import os
+from flask import request, abort
 
 
 # 認證 ChatGPT Action 用的 token
-import os
 KOBBLE_SDK_SECRET = os.environ.get('KOBBLE_SDK_SECRET')
-
-from fastapi import HTTPException
 
 
 def get_jwt_public_key():
@@ -36,7 +29,7 @@ def get_jwt_public_key():
 kobble_public_key = get_jwt_public_key()
 
 
-def get_user_info_from_token(request: Request, optinal=False):
+def get_user_info_from_token(optinal=False):
     # 這裏會拿到 pluginLab 給我們的一個 jwt bearer token, 我們將它解開來取得使用者資訊
     token = request.headers.get('Authorization')
     print(f'token: {token}')
@@ -44,7 +37,8 @@ def get_user_info_from_token(request: Request, optinal=False):
         if optinal:
             return None, None, None
         else:
-            raise HTTPException(status_code=401, detail="Authorization token is missing")
+            # 認證失敗，沒有 Authorization token
+            abort(401, description="Authorization token is missing")
 
     # 將 token 的前面的 Bearer 字串去掉
     token = token.split(' ')[1]
@@ -53,7 +47,7 @@ def get_user_info_from_token(request: Request, optinal=False):
         # 用公鑰解碼 JWT
         payload = jwt.decode(token, kobble_public_key, algorithms=['ES256'], options={"verify_aud": False})
     except jwt.PyJWTError as e:
-        raise HTTPException(status_code=401, detail="Invalid token")
+        abort(401, description="Invalid token")
 
     # 目前的格式
     # {
