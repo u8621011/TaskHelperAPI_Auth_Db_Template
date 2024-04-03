@@ -1,7 +1,13 @@
 from flask import Flask, Response, request, jsonify
 import os
 from flask_cors import CORS
-from .auth_pluginlab import get_user_info_from_token
+
+# pluginLab 是舊版服務
+#from .auth_pluginlab import get_user_info_from_token
+
+# kobble 是新版服務
+from .auth_kobble import get_user_info_from_token
+
 from .db import add_todo_item, get_user_todo_items, cancel_user_todo_item
 
 
@@ -14,7 +20,11 @@ CORS(app, resources={r"/*": {"origins": ["http://chat.openai.com", "https://chat
 @app.route("/todos/<string:username>", methods=['POST'])
 def add_todo(username):
     # 我們其實拿不到 username, 使用 OAuth 得到的 user_id 來當作 key
-    (user_id, plan_id, name, email) = get_user_info_from_token()
+    # pluginLab version
+    #(user_id, plan_id, name, email) = get_user_info_from_token()
+
+    # kobble version
+    (user_id, name, email) = get_user_info_from_token()
 
     data = request.get_json(force=True)
 
@@ -27,7 +37,11 @@ def add_todo(username):
 @app.route("/todos/<string:username>", methods=['GET'])
 def get_todos(username):
     # 我們其實拿不到 username, 使用 OAuth 得到的 user_id 來當作 key
-    (user_id, plan_id, name, email) = get_user_info_from_token()
+    # pluginLab version
+    #(user_id, plan_id, name, email) = get_user_info_from_token()
+
+    # kobble version
+    (user_id, name, email) = get_user_info_from_token()
 
     docs = get_user_todo_items(user_id)
 
@@ -45,7 +59,11 @@ def get_todos(username):
 @app.route("/todos/cancel/<string:username>", methods=['POST'])
 def cancel_todo(username):
     # 我們其實拿不到 username, 使用 OAuth 得到的 user_id 來當作 key
-    (user_id, plan_id, name, email) = get_user_info_from_token()
+    # pluginLab version
+    #(user_id, plan_id, name, email) = get_user_info_from_token()
+
+    # kobble version
+    (user_id, name, email) = get_user_info_from_token()
 
     data = request.get_json(force=True)
     todo_idx = data["todo_idx"]
