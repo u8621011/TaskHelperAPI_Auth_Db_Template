@@ -1,7 +1,7 @@
 from flask import Flask, Response, request, jsonify
 import os
 from flask_cors import CORS
-from .auth import get_user_info_from_token
+from .auth_pluginlab import get_user_info_from_token
 from .db import add_todo_item, get_user_todo_items, cancel_user_todo_item
 
 
