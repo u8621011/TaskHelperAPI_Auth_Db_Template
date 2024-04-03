@@ -8,7 +8,7 @@ from flask import request, abort
 KOBBLE_SDK_SECRET = os.environ.get('KOBBLE_SDK_SECRET')
 
 
-def get_jwt_public_key():
+def download_jwt_public_key():
     # 從 URL 獲取公鑰資訊
     url = "https://sdk.kobble.io/gateway/getPublicKey"
     response = requests.get(url, headers={"Kobble-Sdk-Secret": KOBBLE_SDK_SECRET})
@@ -26,7 +26,13 @@ def get_jwt_public_key():
     return data['pem']
 
 
-kobble_public_key = get_jwt_public_key()
+_kobble_public_key = None
+
+def get_kobble_public_key():
+    global _kobble_public_key
+    if _kobble_public_key is None:
+        _kobble_public_key = download_jwt_public_key()
+    return _kobble_public_key
 
 
 def get_user_info_from_token(optinal=False):
@@ -45,6 +51,8 @@ def get_user_info_from_token(optinal=False):
 
     try:
         # 用公鑰解碼 JWT
+        kobble_public_key = get_kobble_public_key()
+        
         payload = jwt.decode(token, kobble_public_key, algorithms=['ES256'], options={"verify_aud": False})
     except jwt.PyJWTError as e:
         abort(401, description="Invalid token")
