@@ -1,3 +1,12 @@
+import sys
+import os
+
+# 將專案根目錄的絕對路徑加入到 PYTHONPATH
+current_working_path = os.getcwd()
+print(current_working_path)
+sys.path.append(os.path.normpath(current_working_path))
+
+
 from flask import Flask, Response, request, jsonify
 import os
 from flask_cors import CORS
