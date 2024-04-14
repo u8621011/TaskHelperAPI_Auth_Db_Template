@@ -6,9 +6,9 @@ from flask_cors import CORS
 #from .auth_pluginlab import get_user_info_from_token
 
 # kobble 是新版服務
-from .auth_kobble import get_user_info_from_token
+from api.auth_kobble import get_user_info_from_token
 
-from .db import add_todo_item, get_user_todo_items, cancel_user_todo_item
+from api.db import add_todo_item, get_user_todo_items, cancel_user_todo_item
 
 
 app = Flask(__name__)
